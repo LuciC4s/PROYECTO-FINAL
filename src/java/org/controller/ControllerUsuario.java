@@ -6,11 +6,15 @@ package org.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.dao.DaoUsuario;
+import org.models.ModelUsuario;
 
 /**
  *
@@ -19,6 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ControllerUsuario", urlPatterns = {"/ControllerUsuario"})
 public class ControllerUsuario extends HttpServlet {
 
+    String listar="Usuario/consultaUsuario.jsp";
+    String add="Usuario/usuarioIngreso.jsp";
+    String edit="Usuario/usuarioModifica.jsp";
+    String delete="";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -57,7 +65,71 @@ public class ControllerUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        String acceso="";        
+        String action = request.getParameter("accion");        
+        
+        ModelUsuario usuario = new ModelUsuario();
+        DaoUsuario daoUsuario = new DaoUsuario();
+        
+        switch (action){
+            case "read":
+                acceso = listar;
+            break;            
+            case "nuevo":
+                acceso=add;
+            break;
+            case "create":
+                //usuario.setId_usuario(Integer.parseInt(request.getParameter("usuarios")));
+                usuario.setNombre(request.getParameter("nombre"));
+                usuario.setApellido(request.getParameter("apellido"));
+                usuario.setUsuario(request.getParameter("usuarios"));
+                usuario.setPassword(request.getParameter("password"));
+                usuario.setId_rol(Integer.parseInt(request.getParameter("idrol")));
+                usuario.setFecha_crea(Integer.parseInt(request.getParameter("fechacrea")));
+                usuario.setActivo(Boolean.parseBoolean(request.getParameter("activo")));
+                usuario.setFecha_mod(Integer.parseInt(request.getParameter("fechamod")));
+                usuario.setUsuario_crea(request.getParameter("usuariocrea"));
+                usuario.setUsuario_mod(request.getParameter("usuariomod"));
+                daoUsuario.insertar(usuario);
+                acceso = listar;
+            break;
+            case "editar":
+                request.setAttribute("idUsu", request.getParameter("id"));
+                acceso = edit;
+            break;
+            case "update" :
+                usuario.setId_usuario(Integer.parseInt(request.getParameter("usuario")));
+                usuario.setNombre(request.getParameter("nombre"));
+                usuario.setApellido(request.getParameter("apellido"));
+                usuario.setUsuario(request.getParameter("usuarios"));
+                usuario.setPassword(request.getParameter("password"));
+                usuario.setId_rol(Integer.parseInt(request.getParameter("idrol")));
+                usuario.setFecha_crea(Integer.parseInt(request.getParameter("fechacrea")));
+                usuario.setActivo(Boolean.parseBoolean(request.getParameter("activo")));
+                usuario.setFecha_mod(Integer.parseInt(request.getParameter("fechamod")));
+                usuario.setUsuario_crea(request.getParameter("usuariocrea"));
+                usuario.setUsuario_mod(request.getParameter("usuariomod"));
+                
+                daoUsuario.modificar(usuario);
+                acceso = listar;                
+            break;
+            case "delete":
+                usuario.setId_usuario(Integer.parseInt(request.getParameter("id")));
+                daoUsuario.eliminar(usuario);
+                acceso=listar;
+            break;
+            case "buscar":
+                int busqueda = Integer.parseInt(request.getParameter("input"));
+                request.setAttribute("idUsu", request.getParameter("input"));
+                List<ModelUsuario> lista=daoUsuario.search(busqueda);
+                request.setAttribute("datos", lista);
+                request.getRequestDispatcher("Usuario/usuarioSearch.jsp").forward(request, response);
+                
+            break;
+        }
+        RequestDispatcher vista = request.getRequestDispatcher(acceso); //invoca de modo directo un recurso web
+        vista.forward(request, response);
     }
 
     /**
