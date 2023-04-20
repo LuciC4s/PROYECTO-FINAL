@@ -63,7 +63,7 @@ public class DaoUsuario implements CrudUsuario{
 
     @Override
     public ModelUsuario list(int id) {
-        ModelUsuario usuarios = new ModelUsuario();
+        ModelUsuario usuario = new ModelUsuario();
         try {            
             strSql = "SELECT * FROM USUARIO WHERE ID_USUARIO =  " + id;
             conexion.open();

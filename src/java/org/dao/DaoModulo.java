@@ -29,14 +29,14 @@ public class DaoModulo {
     //flag para retornar si la sentencia SQL fue satisfactorio o no
     boolean respuesta = false;
     
-    @Override
+    @Override  
     public List listar() {
         ArrayList<ModelModulo>lstModulo = new ArrayList<>();
          try {            
             strSql = "SELECT P.ID_MODULO, P.NOMBRE, P.DESCRIPCION, P.PATH, P.NIVEL, P.ORDEN, P.ID_MODULO_PADRE, P.FECHA_CREA, P.FECHA_MOD, P.USUARIO_CREA, P.USUARIO_MOD, P.ACTIVO," + 
                      "TP.DESCRIPCION CATEGORIA, CASE WHEN P.ACTIVO = 1 THEN 'ACTIVO' ELSE 'INACTIVO' END DESCESTADO " +
                      "FROM	MODULO P " + 
-                     "JOIN	USUARIO TP " +
+                     "JOIN	PERMISO TP " +
                      "ON		P.FECHA_CREA = TP.FECHA_CREA " +
                      "ON		P.FECHA_MOD = TP.FECHA_MOD " +
                      "ON		P.USUARIO_CREA = TP.USUARIO_CREA " +
@@ -113,7 +113,7 @@ public class DaoModulo {
     @Override
     public boolean insertar(ModelModulo modulo) {
         //Se prepara la sentencia SQL a ejecutar en la BD
-        strSql = "INSERT INTO PRODUCTO (ID_MODULO, NOMBRE, DESCRIPCION, PATH, NIVEL, ORDEN, ID_MODULO_PADRE, FECHA_CREA, FECHA_MOD, USUARIO_CREA, USUARIO_MOD, ACTIVO) "
+        strSql = "INSERT INTO MODULO (ID_MODULO, NOMBRE, DESCRIPCION, PATH, NIVEL, ORDEN, ID_MODULO_PADRE, FECHA_CREA, FECHA_MOD, USUARIO_CREA, USUARIO_MOD, ACTIVO) "
                 + "VALUES ( (SELECT ISNULL(MAX(ID_MODULO),0) + 1 FROM MODULO), " +                   
                  "'" + modulo.getNombre()+ "', " +                 
                 "" + modulo.getDescripcion()+ ", " +       

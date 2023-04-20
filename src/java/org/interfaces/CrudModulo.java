@@ -14,9 +14,9 @@ import org.models.ModelModulo;
  */
 public interface CrudModulo {
     public List listar();
-    public ModelModulo list (int id_modulo);
+    public ModelModulo list (int id);
     public boolean insertar(ModelModulo modulo);
     public boolean modificar(ModelModulo modulo);
     public boolean eliminar(ModelModulo modulo);
-    public List search(int idModulo);
+    public List search(int id_modulo);
 }

@@ -14,7 +14,7 @@ import org.models.ModelPermiso;
  */
 public interface CrudPermiso {
     public List listar();
-    public ModelPermiso list (int id_permido);
+    public ModelPermiso list (int id_permiso);
     public boolean insertar(ModelPermiso permiso);
     public boolean modificar(ModelPermiso permiso);
     public boolean eliminar(ModelPermiso permiso);
