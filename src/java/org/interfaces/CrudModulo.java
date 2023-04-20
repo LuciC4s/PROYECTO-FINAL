@@ -18,4 +18,5 @@ public interface CrudModulo {
     public boolean insertar(ModelModulo modulo);
     public boolean modificar(ModelModulo modulo);
     public boolean eliminar(ModelModulo modulo);
+    public List search(int idModulo);
 }
