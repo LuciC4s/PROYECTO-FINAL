@@ -6,11 +6,15 @@ package org.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.dao.DaoPermiso;
+import org.models.ModelPermiso;
 
 /**
  *
@@ -18,6 +22,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ControllerPermiso", urlPatterns = {"/ControllerPermiso"})
 public class ControllerPermiso extends HttpServlet {
+    String listar="Permiso/permisoConsulta.jsp";
+    String add="Permiso/permisoIngreso.jsp";
+    String edit="Permiso/permisoModifica.jsp";
+    String delete="";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,7 +65,92 @@ public class ControllerPermiso extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        String acceso="";        
+        String action = request.getParameter("accion");        
+        
+        ModelPermiso permiso = new ModelPermiso();
+        DaoPermiso daoPermiso = new DaoPermiso();
+        
+        
+        switch (action){
+            case "read":
+                acceso = listar;
+            break;
+            
+            case "nuevo":
+                acceso=add;
+            break;
+                
+            case "create" :                
+                int id_modulo = Integer.parseInt(request.getParameter("idmodulo"));
+                int id_rol = Integer.parseInt(request.getParameter("idrol"));
+                int fecha_crea = Integer.parseInt(request.getParameter("fecha_crea"));
+                int fecha_mod = Integer.parseInt(request.getParameter("fecha_mod"));
+                int usuario_crea = Integer.parseInt(request.getParameter("usuario_crea"));
+                int usuario_mod = Integer.parseInt(request.getParameter("usuario_mod"));
+                int activo = Integer.parseInt(request.getParameter("activo"));
+
+                permiso.setId_modulo(id_modulo);
+                permiso.setId_rol(id_rol);
+                permiso.setFecha_crea(fecha_crea);
+                permiso.setFecha_mod(fecha_mod);
+                permiso.setUsuario_crea(usuario_crea);
+                permiso.setUsuario_mod(usuario_mod);
+                permiso.setActivo(activo);
+               
+                daoPermiso.insertar(permiso);
+                
+                acceso = listar;
+            break;
+            case "editar":
+                //obtenemos el id de la fila que estamos seleccionando y se la pasamos al formulario de editar
+                request.setAttribute("idPermiso", request.getParameter("id"));
+                //Redireccionamos a la pagina de edición
+                acceso = edit;
+            break;            
+            case "update" :
+                int id_permiso = Integer.parseInt(request.getParameter("id_permiso"));
+                id_modulo = Integer.parseInt(request.getParameter("idmodulo"));
+                id_rol = Integer.parseInt(request.getParameter("idrol"));
+                fecha_crea = Integer.parseInt(request.getParameter("fecha_crea"));
+                fecha_mod = Integer.parseInt(request.getParameter("fecha_mod"));
+                usuario_crea = Integer.parseInt(request.getParameter("usuario_crea"));
+                usuario_mod = Integer.parseInt(request.getParameter("usuario_mod"));
+                activo = Integer.parseInt(request.getParameter("activo"));
+                
+                permiso.setId_rol(id_rol);
+                permiso.setId_modulo(id_modulo);
+                permiso.setId_rol(id_rol);
+                permiso.setFecha_crea(fecha_crea);
+                permiso.setFecha_mod(fecha_mod);
+                permiso.setUsuario_crea(usuario_crea);
+                permiso.setUsuario_mod(usuario_mod);               
+                permiso.setActivo(activo);
+                
+                daoPermiso.modificar(permiso);
+                
+                acceso = listar;                
+            break;
+            case "delete":
+                id_permiso = Integer.parseInt(request.getParameter("id"));
+                permiso.setId_permido(id_permiso);
+                daoPermiso.eliminar(permiso);
+                
+                acceso=listar;
+            break;
+            case "buscar":
+                int busqueda = Integer.parseInt(request.getParameter("input"));
+                request.setAttribute("idPermiso", request.getParameter("input"));
+                List<ModelPermiso> lista=daoPermiso.search(busqueda);
+                request.setAttribute("datos", lista);                
+                request.getRequestDispatcher("Permiso/permisoSearch.jsp").forward(request, response);
+                
+            break;
+        }
+        
+        RequestDispatcher vista = request.getRequestDispatcher(acceso); //invoca de modo directo un recurso web
+        vista.forward(request, response);
     }
 
     /**

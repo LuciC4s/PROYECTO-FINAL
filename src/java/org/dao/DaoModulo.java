@@ -34,7 +34,7 @@ public class DaoModulo {
         ArrayList<ModelModulo>lstModulo = new ArrayList<>();
          try {            
             strSql = "SELECT P.ID_MODULO, P.NOMBRE, P.DESCRIPCION, P.PATH, P.NIVEL, P.ORDEN, P.ID_MODULO_PADRE, P.FECHA_CREA, P.FECHA_MOD, P.USUARIO_CREA, P.USUARIO_MOD, P.ACTIVO," + 
-                     "TP.DESCRIPCION CATEGORIA, CASE WHEN P.ACTIVO = 1 THEN 'ACTIVO' ELSE 'INACTIVO' END DESCESTADO " +
+                     "TP.ID_PERMISO CATEGORIA, CASE WHEN P.ACTIVO = 1 THEN 'ACTIVO' ELSE 'INACTIVO' END DESCESTADO " +
                      "FROM	MODULO P " + 
                      "JOIN	PERMISO TP " +
                      "ON		P.FECHA_CREA = TP.FECHA_CREA " +

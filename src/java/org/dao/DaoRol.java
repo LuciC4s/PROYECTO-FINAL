@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.config.Conexion;
+import org.interfaces.CrudRol;
 import org.models.ModelRol;
 
 /**
@@ -33,7 +34,7 @@ public class DaoRol {
         ArrayList<ModelRol>lstRol = new ArrayList<>();
          try {            
             strSql = "SELECT P.ID_ROL, P.NOMBRE, P.DESCRIPCION, P.ACTIVO, P.USUARIO_CREA, P.USUARIO_MOD, P.FECHA_CREA, P.FECHA_MOD," + 
-                     "TP.DESCRIPCION CATEGORIA, CASE WHEN P.ACTIVO = 1 THEN 'ACTIVO' ELSE 'INACTIVO' END DESCESTADO " +
+                     "TP.ID_USUARIO CATEGORIA, CASE WHEN P.ACTIVO = 1 THEN 'ACTIVO' ELSE 'INACTIVO' END DESCESTADO " +
                      "FROM	ROL P " + 
                      "JOIN	USUARIO TP " +
                      "ON		P.USUARIO_CREA = TP.USUARIO_CREA " +
@@ -193,7 +194,7 @@ public class DaoRol {
         ArrayList<ModelRol>lista = new ArrayList<>();
          try {            
             strSql = "SELECT * FROM ROL WHERE ID_ROL LIKE '%"+ id_rol +"%'";
-             System.out.println("Query Modulo: " + strSql);
+             System.out.println("Query Rol: " + strSql);
             conexion.open();
             rs = conexion.executeQuery(strSql);                             
             
