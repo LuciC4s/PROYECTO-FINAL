@@ -18,4 +18,5 @@ public interface CrudPermiso {
     public boolean insertar(ModelPermiso permiso);
     public boolean modificar(ModelPermiso permiso);
     public boolean eliminar(ModelPermiso permiso);
+    public List search(int idPermiso);
 }

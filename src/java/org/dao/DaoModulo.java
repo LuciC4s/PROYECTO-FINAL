@@ -182,7 +182,24 @@ public class DaoModulo {
 
     @Override
     public boolean eliminar(ModelModulo modulo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Se prepara la sentencia SQL a ejecutar en la BD
+        strSql = "DELETE MODULO WHERE ID_MODULO = " + modulo.getId_modulo();
+        
+        try {
+            //se abre una conexión hacia la BD
+            conexion.open();
+            //Se ejecuta la instrucción y retorna si la ejecución fue satisfactoria
+            respuesta = conexion.executeSql(strSql);
+            //Se cierra la conexión hacia la BD
+            conexion.close();
+             
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DaoModulo.class.getName()).log(Level.SEVERE, null, ex);     
+            return false;
+        } catch(Exception ex){
+            Logger.getLogger(DaoModulo.class.getName()).log(Level.SEVERE, null, ex);            
+        }
+        return respuesta;
     }
 
     @Override
